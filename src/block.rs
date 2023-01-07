@@ -1,13 +1,11 @@
-use raylib::prelude::*;
-
-use crate::entity::Entity;
+use crate::{entity::Entity, math::Vector2};
 
 pub struct Block {
   position: Vector2,
 }
 
 impl Block {
-  pub fn _new(x: f32, y: f32) -> Self {
+  pub fn _new(x: i32, y: i32) -> Self {
     Self {
       position: Vector2::new(x, y),
     }

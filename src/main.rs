@@ -6,10 +6,11 @@ mod block;
 mod board;
 mod consts;
 mod entity;
+mod math;
 mod snake;
 
-const SCREEN_WIDTH: i32 = (consts::BOARD_WIDTH as f32 * consts::CELL_WIDTH) as i32;
-const SCREEN_HEIGHT: i32 = (consts::BOARD_HEIGHT as f32 * consts::CELL_WIDTH) as i32;
+const SCREEN_WIDTH: i32 = consts::BOARD_WIDTH * consts::CELL_SIZE;
+const SCREEN_HEIGHT: i32 = consts::BOARD_HEIGHT * consts::CELL_SIZE;
 
 /**
  * TODO: Implement dying.

@@ -1,9 +1,9 @@
-use crate::consts;
-use raylib::prelude::*;
+use crate::{consts, math::Vector2};
+use raylib::prelude::{RaylibDraw, RaylibDrawHandle};
 
 pub fn draw_background(gfx: &mut RaylibDrawHandle) {
   for (x, y) in Coords::new() {
-    draw_grid_cell(gfx, Vector2::new(x as f32, y as f32));
+    draw_grid_cell(gfx, Vector2::new(x, y));
   }
 }
 
@@ -49,9 +49,12 @@ impl Iterator for Coords {
 
 fn draw_grid_cell(gfx: &mut RaylibDrawHandle, position: Vector2) {
   gfx.draw_rectangle_v(
-    position * consts::CELL_WIDTH,
-    consts::CELL_SIZE,
-    if position.x % 2.0 == position.y % 2.0 {
+    Vector2::new(
+      position.x * consts::CELL_SIZE,
+      position.y * consts::CELL_SIZE,
+    ),
+    Vector2::new(consts::CELL_SIZE, consts::CELL_SIZE),
+    if position.x % 2 == position.y % 2 {
       consts::GRID_COLOR_LIGHT
     } else {
       consts::GRID_COLOR_DARK

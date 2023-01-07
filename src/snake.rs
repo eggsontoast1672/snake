@@ -1,6 +1,5 @@
-use crate::{block::Block, consts, entity::Entity};
-
-use raylib::prelude::*;
+use crate::{block::Block, consts, entity::Entity, math::Vector2};
+use raylib::{consts::KeyboardKey, drawing::RaylibDrawHandle, prelude::RaylibDraw, RaylibHandle};
 
 #[derive(PartialEq)]
 pub enum Direction {
@@ -13,10 +12,10 @@ pub enum Direction {
 impl Direction {
   pub fn as_vector(&self) -> Vector2 {
     match self {
-      Self::Up => Vector2::new(0.0, -1.0),
-      Self::Down => Vector2::new(0.0, 1.0),
-      Self::Left => Vector2::new(-1.0, 0.0),
-      Self::Right => Vector2::new(1.0, 0.0),
+      Self::Up => Vector2::new(0, -1),
+      Self::Down => Vector2::new(0, 1),
+      Self::Left => Vector2::new(-1, 0),
+      Self::Right => Vector2::new(1, 0),
     }
   }
 }
@@ -31,9 +30,14 @@ pub struct Snake {
 impl Snake {
   pub fn draw(&self, gfx: &mut RaylibDrawHandle) {
     for block in self.body.iter() {
+      let block_position = block.position();
       gfx.draw_rectangle_v(
-        block.position() * consts::CELL_WIDTH,
-        consts::CELL_SIZE,
+        Vector2::new(
+          block_position.x * consts::CELL_SIZE,
+          block_position.y * consts::CELL_SIZE,
+        ),
+        // block.position() * consts::CELL_SIZE,
+        Vector2::new(consts::CELL_SIZE, consts::CELL_SIZE),
         consts::SNAKE_COLOR,
       );
     }
@@ -110,11 +114,16 @@ impl Snake {
   }
 
   fn update_position(&mut self) {
-    let new_position = self.body[0].position() + self.direction.as_vector();
-    if new_position.x < 0.0
-      || new_position.y < 0.0
-      || new_position.x + 1.0 > consts::BOARD_WIDTH as f32
-      || new_position.y + 1.0 > consts::BOARD_HEIGHT as f32
+    let head_position = self.body[0].position();
+    let direction_vector = self.direction.as_vector();
+    let new_position = Vector2::new(
+      head_position.x + direction_vector.x,
+      head_position.y + direction_vector.y,
+    );
+    if new_position.x < 0
+      || new_position.y < 0
+      || new_position.x + 1 > consts::BOARD_WIDTH
+      || new_position.y + 1 > consts::BOARD_HEIGHT
     {
       // At this point, the snake is trying to move outside the bounds of the
       // screen.
