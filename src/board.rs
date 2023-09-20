@@ -2,9 +2,9 @@ use crate::{consts, math::Vector2};
 use raylib::prelude::{RaylibDraw, RaylibDrawHandle};
 
 pub fn draw_background(gfx: &mut RaylibDrawHandle) {
-  for (x, y) in Coords::new() {
-    draw_grid_cell(gfx, Vector2::new(x, y));
-  }
+    for (x, y) in Coords::new() {
+        draw_grid_cell(gfx, Vector2::new(x, y));
+    }
 }
 
 const CELL_PRODUCT: i32 = (consts::BOARD_WIDTH * consts::BOARD_HEIGHT) as i32;
@@ -22,42 +22,42 @@ const CELL_PRODUCT: i32 = (consts::BOARD_WIDTH * consts::BOARD_HEIGHT) as i32;
 /// (0, 14) | (1, 14) | (2, 14) |     | (16, 14)
 /// ```
 pub struct Coords {
-  iteration: i32,
+    iteration: i32,
 }
 
 impl Coords {
-  pub fn new() -> Self {
-    Self { iteration: 0 }
-  }
+    pub fn new() -> Self {
+        Self { iteration: 0 }
+    }
 }
 
 impl Iterator for Coords {
-  type Item = (i32, i32);
+    type Item = (i32, i32);
 
-  fn next(&mut self) -> Option<Self::Item> {
-    if self.iteration < CELL_PRODUCT {
-      let last_iteration = self.iteration;
-      self.iteration += 1;
-      return Some((
-        last_iteration / consts::BOARD_HEIGHT as i32,
-        last_iteration % consts::BOARD_HEIGHT as i32,
-      ));
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.iteration < CELL_PRODUCT {
+            let last_iteration = self.iteration;
+            self.iteration += 1;
+            return Some((
+                last_iteration / consts::BOARD_HEIGHT as i32,
+                last_iteration % consts::BOARD_HEIGHT as i32,
+            ));
+        }
+        None
     }
-    None
-  }
 }
 
 fn draw_grid_cell(gfx: &mut RaylibDrawHandle, position: Vector2) {
-  gfx.draw_rectangle_v(
-    Vector2::new(
-      position.x * consts::CELL_SIZE,
-      position.y * consts::CELL_SIZE,
-    ),
-    Vector2::new(consts::CELL_SIZE, consts::CELL_SIZE),
-    if position.x % 2 == position.y % 2 {
-      consts::GRID_COLOR_LIGHT
-    } else {
-      consts::GRID_COLOR_DARK
-    },
-  );
+    gfx.draw_rectangle_v(
+        Vector2::new(
+            position.x * consts::CELL_SIZE,
+            position.y * consts::CELL_SIZE,
+        ),
+        Vector2::new(consts::CELL_SIZE, consts::CELL_SIZE),
+        if position.x % 2 == position.y % 2 {
+            consts::GRID_COLOR_LIGHT
+        } else {
+            consts::GRID_COLOR_DARK
+        },
+    );
 }

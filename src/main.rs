@@ -1,70 +1,66 @@
-use crate::{apple::Apple, snake::Snake};
-use raylib::prelude::*;
-
 mod apple;
 mod block;
 mod board;
-mod consts;
 mod entity;
-mod math;
 mod snake;
 
-const SCREEN_WIDTH: i32 = consts::BOARD_WIDTH * consts::CELL_SIZE;
-const SCREEN_HEIGHT: i32 = consts::BOARD_HEIGHT * consts::CELL_SIZE;
+use crate::apple::Apple;
+use crate::snake::Snake;
+use raylib::prelude::*;
 
-/**
- * TODO: Implement dying.
- */
+#[doc = r#"* TODO: Implement dying."#]
 fn main() {
-  let (mut ctx, thread) = raylib::init()
-    .size(SCREEN_WIDTH, SCREEN_HEIGHT)
-    .title("Snake!")
-    .build();
+    let (mut ctx, thread) = raylib::init()
+        .size(SCREEN_WIDTH, SCREEN_HEIGHT)
+        .title("Snake!")
+        .build();
 
-  let mut snake = Snake::new();
-  let mut apple = Apple::new();
+    let mut snake = Snake::new();
+    let mut apple = Apple::new();
 
-  let mut score = 0u32;
+    let mut score = 0u32;
 
-  ctx.set_target_fps(10);
+    ctx.set_target_fps(5);
 
-  while !ctx.window_should_close() {
-    // === UPDATE ===
-    snake.update(&mut ctx);
+    while !ctx.window_should_close() {
+        // === UPDATE ===
+        snake.update(&mut ctx);
 
-    if snake.is_dead() {
-      snake = Snake::new();
-      apple = Apple::new();
+        if snake.is_dead() {
+            snake = Snake::new();
+            apple = Apple::new();
 
-      score = 0;
-    }
-
-    if snake.is_touching(&apple) {
-      loop {
-        apple.randomize_position();
-        if !snake.is_touching(&apple) {
-          break;
+            score = 0;
         }
-      }
-      snake.increase_length();
 
-      score += 1;
+        if snake.is_touching(&apple) {
+            // loop {
+            //   apple.randomize_position();
+            //   if !snake.is_touching(&apple) {
+            //     break;
+            //   }
+            // }
+            game.randomize_apple_position();
+            snake.increase_length();
 
-      println!("Score: {}", score);
+            score += 1;
+
+            println!("Score: {}", score);
+        }
+
+        // === DRAW ===
+        let mut gfx = ctx.begin_drawing(&thread);
+
+        gfx.clear_background(Color::BLACK);
+
+        board::draw_background(&mut gfx);
+
+        apple.draw(&mut gfx);
+        snake.draw(&mut gfx);
+
+        game.with_drawing_context(|context| {
+            context.draw(apple);
+            context.draw(snake);
+        });
     }
-
-    // === DRAW ===
-    let mut gfx = ctx.begin_drawing(&thread);
-
-    gfx.clear_background(Color::BLACK);
-
-    board::draw_background(&mut gfx);
-
-    apple.draw(&mut gfx);
-    snake.draw(&mut gfx);
-  }
-}
-
-const fn color_from_rgb(r: u8, g: u8, b: u8) -> Color {
-  Color { r, g, b, a: 255 }
 }

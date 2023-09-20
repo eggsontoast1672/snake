@@ -7,10 +7,10 @@ pub const BOARD_HEIGHT: i32 = 15;
 pub const GRID_COLOR_DARK: Color = crate::color_from_rgb(95, 167, 47);
 pub const GRID_COLOR_LIGHT: Color = crate::color_from_rgb(119, 201, 64);
 pub const SNAKE_STARTING_POSITIONS: [Vector2; 4] = [
-  Vector2::new(4, 7),
-  Vector2::new(3, 7),
-  Vector2::new(2, 7),
-  Vector2::new(1, 7),
+    Vector2::new(4, 7),
+    Vector2::new(3, 7),
+    Vector2::new(2, 7),
+    Vector2::new(1, 7),
 ];
 pub const SNAKE_COLOR: Color = Color::BLUE;
 
